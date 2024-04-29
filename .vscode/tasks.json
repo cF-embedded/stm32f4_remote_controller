@@ -1,0 +1,74 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "main_program - first build",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
+            "command": "cmake",
+            "args": [
+                "-G", "Ninja",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                "-B", "${workspaceFolder}/src/out",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/src/cmake/gcc-arm-none-eabi.cmake",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "main_program - compile",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/src/out", 
+                "-j", "8"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": "build"
+        },       
+        {
+            "type": "shell",
+            "label": "main_program - clean project",
+            "command": "cmake",
+            "args": ["--build", "${workspaceFolder}/src/out", "--target", "clean"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "main_program - flash-stlink",
+            "type": "shell",
+            "command": "ST-LINK_CLI",
+            "args": [
+                "-c",
+                "SWD",
+                "UR",
+                "-P",
+                "${workspaceFolder}/src/out/${workspaceFolderBasename}.hex",
+                "0x8000000",
+                "-V",
+                "after_programming",
+                "-Rst",
+                "-Run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/out"
+            },
+            "dependsOn": "build-debug",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
