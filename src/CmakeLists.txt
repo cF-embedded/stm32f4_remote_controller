@@ -49,6 +49,7 @@ set(sources_SRCS
     external/FreeRTOS/queue.c
     external/FreeRTOS/tasks.c
     external/FreeRTOS/timers.c
+    code/hm_10/hm_10.c
     main.c
     # Put here your source files, one in each line, relative to CMakeLists.txt file location
 )
@@ -63,6 +64,7 @@ set(include_path_DIRS
     external/stm32
     hw/core_init
     hw/gpio_f4
+    code/hm_10
     # Put here your include dirs, one in each line, relative to CMakeLists.txt file location
 )
 
