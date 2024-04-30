@@ -2964,6 +2964,17 @@
 		)
 		(uuid "0241ba82-3533-4a5e-9160-4b94e79b9e3d")
 	)
+	(wire
+		(pts
+			(xy 15.24 195.58) (xy 148.59 195.58)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+			(color 0 3 255 1)
+		)
+		(uuid "042ef462-047e-45b3-84b9-61d9200a82fd")
+	)
 	(polyline
 		(pts
 			(xy 88.9 53.34) (xy 147.32 53.34)
@@ -3256,6 +3267,17 @@
 	)
 	(wire
 		(pts
+			(xy 148.59 124.46) (xy 15.24 124.46)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+			(color 0 3 255 1)
+		)
+		(uuid "5a4e698a-eb0e-440e-b3a4-9d11e419c4fa")
+	)
+	(wire
+		(pts
 			(xy 215.9 90.17) (xy 217.17 90.17)
 		)
 		(stroke
@@ -3426,6 +3448,17 @@
 			(type default)
 		)
 		(uuid "83244c5a-26f8-4af9-b866-e6fdd23ddc5f")
+	)
+	(wire
+		(pts
+			(xy 15.24 124.46) (xy 15.24 195.58)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+			(color 0 3 255 1)
+		)
+		(uuid "85ca76d7-6812-46a3-b400-51740232525a")
 	)
 	(wire
 		(pts
@@ -3945,6 +3978,17 @@
 	)
 	(wire
 		(pts
+			(xy 148.59 195.58) (xy 148.59 124.46)
+		)
+		(stroke
+			(width 0)
+			(type dash)
+			(color 0 3 255 1)
+		)
+		(uuid "dec55aa0-7828-43fb-b02c-b62ff5127276")
+	)
+	(wire
+		(pts
 			(xy 194.31 52.07) (xy 194.31 53.34)
 		)
 		(stroke
@@ -4156,6 +4200,18 @@
 			)
 		)
 		(uuid "4dc1b22c-383e-4175-a6b4-169463dfc7ca")
+	)
+	(text "DC-DC STEP UP\n"
+		(exclude_from_sim no)
+		(at 131.064 129.54 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.254)
+				(bold yes)
+			)
+		)
+		(uuid "6f93853c-a33a-480f-affe-4f2f9bdac0fe")
 	)
 	(text "HM-10"
 		(exclude_from_sim no)
