@@ -24,6 +24,10 @@
 
 /* USART HW priority */
 #define USART_PRIORITY 8
+/** DMA on I2C TX HW priority */
+#define DMA_I2C_TX_PRIORITY 7
+/** I2C1 Event HW priority */
+#define I2C1_EV_PRIORITY 8
 
 /**
  * @}
