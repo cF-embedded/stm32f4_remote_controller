@@ -54,6 +54,7 @@ set(sources_SRCS
     initialization/initialization.c
     hw/i2c_master/i2c_master.c
     external/ssd1306/ssd1306.c
+    code/display/display.c
     main.c
     # Put here your source files, one in each line, relative to CMakeLists.txt file location
 )
@@ -73,6 +74,7 @@ set(include_path_DIRS
     initialization
     hw/i2c_master
     external/ssd1306
+    code/display
     # Put here your include dirs, one in each line, relative to CMakeLists.txt file location
 )
 
