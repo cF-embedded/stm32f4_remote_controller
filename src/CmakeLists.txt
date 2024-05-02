@@ -53,6 +53,7 @@ set(sources_SRCS
     hw/usart/usart.c
     initialization/initialization.c
     hw/i2c_master/i2c_master.c
+    external/ssd1306/ssd1306.c
     main.c
     # Put here your source files, one in each line, relative to CMakeLists.txt file location
 )
@@ -71,6 +72,7 @@ set(include_path_DIRS
     hw/usart
     initialization
     hw/i2c_master
+    external/ssd1306
     # Put here your include dirs, one in each line, relative to CMakeLists.txt file location
 )
 
