@@ -10,6 +10,7 @@ set(INCLUDE_DIRS
     external/stm32
     external/FreeRTOS/include
     external/cmsis
+    external/ssd1306
     # hw
     hw/core_init
     hw/gpio_f4
@@ -37,6 +38,7 @@ set(C_SRCS
     external/FreeRTOS/queue.c
     external/FreeRTOS/tasks.c
     external/FreeRTOS/timers.c
+    external/ssd1306/ssd1306.c
     # hw 
     hw/startup/hardfault.c
     hw/core_init/core_init.c
@@ -50,6 +52,7 @@ set(C_SRCS
     # main section
     initialization/initialization.c
     hw/i2c_master/i2c_master.c
+    external/ssd1306/ssd1306.c
     main.c
 )
 
