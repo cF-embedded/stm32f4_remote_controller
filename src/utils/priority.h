@@ -22,6 +22,16 @@
 /** Position estimation task priority */
 #define HM_10_AT_INIT_TASK_PRIORITY (tskIDLE_PRIORITY + 8)
 
+/** SSD1306 initialization stacksize */
+#define SSD1306_INIT_STACKSIZE (configMINIMAL_STACK_SIZE * 2)
+/** SSD1306 initialization priority */
+#define SSD1306_INIT_PRIORITY (tskIDLE_PRIORITY + 10)
+
+/** Display batter stacksize */
+#define DISPLAY_STACKSIZE (configMINIMAL_STACK_SIZE * 10)
+/** Display battery priority */
+#define DISPLAY_PRIORITY (tskIDLE_PRIORITY + 5)
+
 /* USART HW priority */
 #define USART_PRIORITY 8
 /** DMA on I2C TX HW priority */
