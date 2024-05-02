@@ -15,6 +15,7 @@ set(INCLUDE_DIRS
     hw/gpio_f4
     hw/usart
     hw/adc
+    hw/i2c_master
     # utils
     utils
     # code
@@ -42,11 +43,13 @@ set(C_SRCS
     hw/gpio_f4/gpio_f4.c
     hw/usart/usart.c
     hw/adc/adc.c
+    hw/i2c_master/i2c_master.c
     # code
     code/hm_10/hm_10.c
     code/joystick_controller/joystick_controller.c
     # main section
     initialization/initialization.c
+    hw/i2c_master/i2c_master.c
     main.c
 )
 
