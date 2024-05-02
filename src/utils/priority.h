@@ -22,6 +22,15 @@
 /** Position estimation task priority */
 #define HM_10_AT_INIT_TASK_PRIORITY (tskIDLE_PRIORITY + 8)
 
+#define JOYSTICK_CONTROLLER_SPEED_STACKSIZE (configMINIMAL_STACK_SIZE * 2)
+/** Position estimation task priority */
+#define JOYSTICK_CONTROLLER_SPEED_PRIORITY (tskIDLE_PRIORITY + 8)
+
+/** Position estimation task stacksize */
+#define JOYSTICK_CONTROLLER_ANGLE_STACKSIZE (configMINIMAL_STACK_SIZE * 2)
+/** Position estimation task priority */
+#define JOYSTICK_CONTROLLER_ANGLE_PRIORITY (tskIDLE_PRIORITY + 9)
+
 /* USART HW priority */
 #define USART_PRIORITY 8
 
