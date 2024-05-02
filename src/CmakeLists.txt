@@ -22,6 +22,7 @@ set(INCLUDE_DIRS
     # code
     code/hm_10
     code/joystick_controller
+    code/display
     # main section
     initialization
 )
@@ -49,10 +50,9 @@ set(C_SRCS
     # code
     code/hm_10/hm_10.c
     code/joystick_controller/joystick_controller.c
+    code/display/display.c
     # main section
     initialization/initialization.c
-    hw/i2c_master/i2c_master.c
-    external/ssd1306/ssd1306.c
     main.c
 )
 
