@@ -86,7 +86,7 @@ void ssd1306_init(void)
 
 void ssd1306_clear_screen(void)
 {
-    memset(buffer, 0xFF, BUFFER_SIZE);
+    memset(buffer, 0x00, BUFFER_SIZE);
 }
 
 void ssd1306_update_screen(void)
