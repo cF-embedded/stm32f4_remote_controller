@@ -16,6 +16,9 @@
 /* AT Command buf length */
 #define MAX_AT_COMMAND_LEN 32
 
+/* Time between At Commands in ms */
+#define AT_COMMAND_DELAY 1000
+
 /* Buffer to contain AT Commands for HM-10 Initialization */
 static char at_command_buf[MAX_AT_COMMAND_LEN];
 
@@ -55,7 +58,7 @@ static int32_t hm_10_send_at_command(const char* command)
 
     size_t len = strlen(at_command_buf);
 
-    return usart_send_buf((uint8_t*)at_command_buf, len);
+    return hm_10_send_buf((uint8_t*)at_command_buf, len);
 }
 
 int32_t hm_10_send_buf(uint8_t* buf, const int32_t len)
@@ -79,7 +82,7 @@ static void hm_10_at_init_task(void* params)
         /* Send AT command init */
         hm_10_send_at_command(at_commands_init[i]);
 
-        rtos_delay_until(&tick_cnt, 1000);
+        rtos_delay_until(&tick_cnt, AT_COMMAND_DELAY);
     }
 
     vTaskSuspend(NULL);
