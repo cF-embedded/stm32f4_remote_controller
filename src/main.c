@@ -1,9 +1,11 @@
-#include "core_init.h"
+
+#include "initialization.h"
 #include "platform_specific.h"
 
 int main(void)
 {
-    core_init();
+    /* Initialization whole system */
+    system_init();
     /* Place your initialisation code here. */
     vTaskStartScheduler();
 

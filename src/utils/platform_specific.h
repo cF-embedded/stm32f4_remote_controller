@@ -131,7 +131,29 @@
 #define rtos_queue_receive(queue_ptr, data_ptr, ms)                            \
    xQueueReceive(queue_ptr, (void *)data_ptr, ms/portTICK_RATE_MS)
 
+   /**
+ * Receive data from the queue.
+ *
+ * @param queue_ptr     Queue handle.
+ * @param data_ptr      Pointer to data to receive.
+ * @param yield         Value information for OS to change actual task after isr
+ *
+ * @return              true on success, false on timeout.
+ */
+#define rtos_queue_receive_isr(queue_ptr, data_ptr, yield)                            \
+   xQueueReceiveFromISR(queue_ptr, (void *)data_ptr, yield)
 
+   /**
+ * Send data to the queue.
+ *
+ * @param queue_ptr     Queue handle.
+ * @param data_ptr      Pointer to data to send.
+ * @param yield         Value information for OS to change actual task after isr
+ *
+ * @return              true on success, false on timeout.
+ */
+#define rtos_queue_send_isr(queue_ptr, data_ptr, yield)                            \
+   xQueueSendFromISR(queue_ptr, (void *)data_ptr, yield)
 
 /**
  * Create RTOS semaphore.
