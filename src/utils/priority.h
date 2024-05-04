@@ -17,6 +17,8 @@
  * @{
  */
 
+#define USART_PRIORITY 8
+
 /**
  * @}
  */
