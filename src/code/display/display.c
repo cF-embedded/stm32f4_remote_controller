@@ -9,6 +9,7 @@
  */
 
 #include "display.h"
+#include "battery_bitmap.h"
 #include "i2c_master.h"
 #include "platform_specific.h"
 #include "ssd1306.h"
@@ -47,14 +48,11 @@ static void ssd1306_init_task(void* params)
 {
     (void)params;
 
-    while(1)
-    {
-        ssd1306_init();
-        /* Resume display task after ssd1306 init */
-        vTaskResume(display_handle);
-        /* Suspend ssd1306_init_task */
-        vTaskSuspend(NULL);
-    }
+    ssd1306_init();
+    /* Resume display task after ssd1306 init */
+    vTaskResume(display_handle);
+    /* Suspend ssd1306_init_task */
+    vTaskSuspend(NULL);
 }
 
 static void display_task(void* params)
@@ -68,6 +66,9 @@ static void display_task(void* params)
     while(1)
     {
         ticks = rtos_tick_count_get();
+        ssd1306_draw_pixel(1, 1);
+        // ssd1306_draw_bitmap(CHARGE_AREA_START_X, CHARGE_AREA_START_Y, CHARGE_AREA_WIDTH, CHARGE_AREA_HEIGHT, battery_bitmap);
+        ssd1306_update_screen();
         rtos_delay_until(&ticks, 500);
     }
 }

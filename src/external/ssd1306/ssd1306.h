@@ -12,11 +12,6 @@
 
 #include "platform_specific.h"
 
-/* SSD1306 Height in pixels */
-#define SSD1306_HEIGHT 64
-/* SSD1306 Width in pixels */
-#define SSD1306_WIDTH 128
-
 #define SSD1306_BLACK 0   //< Draw 'off' pixels
 #define SSD1306_WHITE 1   //< Draw 'on' pixels
 
@@ -45,7 +40,7 @@
 #define SSD1306_SETPRECHARGE        0xD9   //< See datasheet
 #define SSD1306_SETCOMPINS          0xDA   //< See datasheet
 #define SSD1306_SETVCOMDETECT       0xDB   //< See datasheet
-#define SSD1306_DEACTIVATE_SCROLL   0x2E   
+#define SSD1306_DEACTIVATE_SCROLL   0x2E
 
 #define SSD1306_SETSTARTLINE 0x40   //< See datasheet
 
