@@ -15,12 +15,33 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-/**
- * @brief Initialize hm-10 to work
- * 
- */
-void hm_10_task_init(void);
+#include "platform_specific.h"
 
+    /**
+     * Send buffer through hm-10.
+     *
+     * @param buf           Buffer to send.
+     * @param len           Length of buffer.
+     *
+     * @return              Error code.
+     */
+    int32_t hm_10_send_buf(uint8_t* buf, const int32_t len);
+
+    /**
+     * Send buffer through hm-10.
+     *
+     * @param buf           Buffer to send.
+     * @param len           Length of buffer.
+     *
+     * @return              Error code.
+     */
+    int32_t hm_10_send_buf(uint8_t* buf, const int32_t len);
+
+    /**
+     * @brief Initialize hm-10 to work
+     *
+     */
+    void hm_10_task_init(void);
 
 #ifdef __cplusplus
 }

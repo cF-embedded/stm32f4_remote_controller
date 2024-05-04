@@ -63,6 +63,11 @@ int32_t hm_10_send_buf(uint8_t* buf, const int32_t len)
     return usart_send_buf(buf, len);
 }
 
+int32_t hm_10_read_buf(uint8_t* buf, const int32_t len)
+{
+    return usart_read_buf(buf, len);
+}
+
 static void hm_10_at_init_task(void* params)
 {
     (void)params;
