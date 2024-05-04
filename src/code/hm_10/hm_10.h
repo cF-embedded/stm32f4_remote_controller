@@ -15,6 +15,13 @@ extern "C"
 {
 #endif /* __cplusplus */
 
+/**
+ * @brief Initialize hm-10 to work
+ * 
+ */
+void hm_10_task_init(void);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
