@@ -51,6 +51,7 @@ set(sources_SRCS
     external/FreeRTOS/timers.c
     code/hm_10/hm_10.c
     hw/usart/usart.c
+    initialization/initialization.c
     main.c
     # Put here your source files, one in each line, relative to CMakeLists.txt file location
 )
@@ -67,6 +68,7 @@ set(include_path_DIRS
     hw/gpio_f4
     code/hm_10
     hw/usart
+    initialization
     # Put here your include dirs, one in each line, relative to CMakeLists.txt file location
 )
 
