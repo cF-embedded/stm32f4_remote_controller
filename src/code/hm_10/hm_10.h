@@ -28,14 +28,14 @@ extern "C"
     int32_t hm_10_send_buf(uint8_t* buf, const int32_t len);
 
     /**
-     * Send buffer through hm-10.
+     * Read buffer from hm-10.
      *
-     * @param buf           Buffer to send.
+     * @param buf           Buffer to write read data.
      * @param len           Length of buffer.
      *
      * @return              Error code.
      */
-    int32_t hm_10_send_buf(uint8_t* buf, const int32_t len);
+    int32_t hm_10_read_buf(uint8_t* buf, const int32_t len);
 
     /**
      * @brief Initialize hm-10 to work
