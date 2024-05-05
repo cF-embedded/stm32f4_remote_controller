@@ -9,8 +9,10 @@
  */
 
 #include "display.h"
+#include "hm_10.h"
 #include "i2c_master.h"
 #include "platform_specific.h"
+#include "speedometer_bitmap.h"
 #include "ssd1306.h"
 
 static TaskHandle_t display_handle;
@@ -21,6 +23,11 @@ typedef enum
     BATTERY_SCREEN = 1
 } display_screen_e_t;
 
+/**
+ * @brief show speedometer screen on display
+ *
+ */
+static void display_show_speedometer_screen(void);
 /**
  * @brief Display task handler.
  *
@@ -43,6 +50,20 @@ void display_tasks_init(void)
     rtos_task_create(display_task, "display", DISPLAY_STACKSIZE, DISPLAY_PRIORITY, &display_handle);
 }
 
+void display_show_speedometer_screen(void)
+{
+    static uint8_t speed = 0;
+
+    ssd1306_draw_bitmap(SPEEDOMETER_BITMAP_AREA_X, SPEEDOMETER_BITMAP_AREA_Y, SPEEDOMETER_BITMAP_AREA_WIDTH, SPEEDOMETER_BITMAP_AREA_HEIGHT, speedometer_bitmap);
+
+    ssd1306_draw_bitmap(MPH_BITMAP_AREA_X, MPH_BITMAP_AREA_Y, MPH_BITMAP_AREA_WIDTH, MPH_BITMAP_AREA_HEIGHT, mph_bitmap);
+
+    hm_10_read_buf(&speed, 1);
+
+    ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, "200");
+
+    ssd1306_update_screen();
+}
 static void ssd1306_init_task(void* params)
 {
     (void)params;
@@ -63,11 +84,28 @@ static void display_task(void* params)
 
     tick_t ticks;
 
+    display_screen_e_t act_screen = SPEEDOMETER_SCREEN;
+
     /* Suspend display task befor ssd1306 initialize */
     vTaskSuspend(NULL);
     while(1)
     {
         ticks = rtos_tick_count_get();
-        rtos_delay_until(&ticks, 500);
+
+        switch(act_screen)
+        {
+            case SPEEDOMETER_SCREEN:
+            {
+                display_show_speedometer_screen();
+                break;
+            }
+
+            case BATTERY_SCREEN:
+            {
+                break;
+            }
+        }
+
+        rtos_delay_until(&ticks, 100);
     }
 }
