@@ -15,6 +15,7 @@
 #include "platform_specific.h"
 #include "speedometer_bitmap.h"
 #include "ssd1306.h"
+#include "string.h"
 
 static TaskHandle_t display_handle;
 
@@ -63,23 +64,25 @@ void display_tasks_init(void)
 void display_show_speedometer_screen(void)
 {
     static uint8_t speed = 0;
+    static uint8_t* speed_string[4];
 
     ssd1306_draw_bitmap(SPEEDOMETER_BITMAP_AREA_X, SPEEDOMETER_BITMAP_AREA_Y, SPEEDOMETER_BITMAP_AREA_WIDTH, SPEEDOMETER_BITMAP_AREA_HEIGHT, speedometer_bitmap);
 
-    ssd1306_draw_bitmap(MPH_BITMAP_AREA_X, MPH_BITMAP_AREA_Y, MPH_BITMAP_AREA_WIDTH, MPH_BITMAP_AREA_WIDTH, mph_bitmap);
+    ssd1306_draw_bitmap(MPH_BITMAP_AREA_X, MPH_BITMAP_AREA_Y, MPH_BITMAP_AREA_WIDTH, MPH_BITMAP_AREA_HEIGHT, mph_bitmap);
 
     hm_10_read_buf(&speed, 1);
 
-    // ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, speed);
-
-    ssd1306_update_screen();
+    ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, "137");
 }
 
 void display_show_battery_screen(void)
 {
+    // static uint8_t vbat = 0;
+    // static uint8_t* vbat[5];
     ssd1306_draw_bitmap(BATTERY_BITMAP_AREA_X, BATTERY_BITMAP_AREA_Y, BATTERY_BITMAP_AREA_WIDTH, BATTERY_BITMAP_AREA_HEIGHT, battery_bitmap);
 
-    ssd1306_update_screen();
+    // strcat(vbat, "V");
+    ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, "2.8V");
 }
 
 static void ssd1306_init_task(void* params)
@@ -138,6 +141,8 @@ static void display_task(void* params)
                 break;
             }
         }
+
+        ssd1306_update_screen();
 
         rtos_delay_until(&ticks, 100);
     }

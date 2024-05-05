@@ -38,7 +38,6 @@ extern "C"
 
 /* Start of speed string on oled x axis */
 #define SPEEDOMETER_STRING_AREA_X 90
-
 /* Start of speed string on oled y axis */
 #define SPEEDOMETER_STRING_AREA_Y 32
 
