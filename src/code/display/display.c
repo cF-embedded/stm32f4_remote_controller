@@ -16,6 +16,7 @@
 #include "speedometer_bitmap.h"
 #include "ssd1306.h"
 #include <stdio.h>
+#include <string.h>
 
 static TaskHandle_t display_handle;
 
@@ -61,15 +62,23 @@ void display_tasks_init(void)
 
 void display_show_speedometer_screen(void)
 {
-    static uint8_t speed = 0;
+    char* speed_str[6] = {0};
+    static char* last_speed_str[6] = {0};
+
+    if(hm_10_read_buf(&speed_str, 4) > 0)
+    {
+        if(strcmp(speed_str, last_speed_str) != 0)
+        {
+            ssd1306_clear_screen();
+            ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, speed_str);
+        }
+    }
 
     ssd1306_draw_bitmap(SPEEDOMETER_BITMAP_AREA_X, SPEEDOMETER_BITMAP_AREA_Y, SPEEDOMETER_BITMAP_AREA_WIDTH, SPEEDOMETER_BITMAP_AREA_HEIGHT, speedometer_bitmap);
 
     ssd1306_draw_bitmap(MPH_BITMAP_AREA_X, MPH_BITMAP_AREA_Y, MPH_BITMAP_AREA_WIDTH, MPH_BITMAP_AREA_HEIGHT, mph_bitmap);
 
-    hm_10_read_buf(&speed, 1);
-
-    ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, "200");
+    strcpy(last_speed_str, speed_str);
 }
 
 void display_show_battery_screen(void)
