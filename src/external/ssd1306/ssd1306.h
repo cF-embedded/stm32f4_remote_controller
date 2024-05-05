@@ -73,8 +73,17 @@ void ssd1306_draw_pixel(uint8_t x, uint8_t y);
  * @param Y
  * @param W
  * @param H
- * @param pBMP
+ * @param bitmap
  */
 void ssd1306_draw_bitmap(uint8_t X, uint8_t Y, uint8_t W, uint8_t H, const uint8_t* pBMP);
+
+/**
+ * @brief Drawing string in the selected position
+ *
+ * @param x
+ * @param y
+ * @param c
+ */
+void ssd1306_draw_string(uint8_t x, uint8_t y, char* c);
 
 #endif   // __SSD1306_H__
