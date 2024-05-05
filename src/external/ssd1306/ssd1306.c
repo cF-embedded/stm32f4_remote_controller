@@ -126,41 +126,20 @@ void ssd1306_draw_pixel(uint8_t x, uint8_t y)
     buffer[(x + (y_offset / 8) * SSD1306_WIDTH) + 1] |= (1 << (y_offset & 7));
 }
 
-void ssd1306_draw_bitmap(uint8_t X, uint8_t Y, uint8_t W, uint8_t H, const uint8_t* pBMP)
+void ssd1306_draw_bitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint8_t* bitmap)
 {
-    uint8_t pX;
-    uint8_t pY;
-    uint8_t tmpCh;
-    uint8_t bL;
-
-    pY = Y;
-    while(pY < Y + H)
+    for(int16_t i = 0; i < h; ++i)
     {
-        pX = X;
-        while(pX < X + W)
+        for(int16_t j = 0; j < w; ++j)
         {
-            bL = 0;
-            tmpCh = *pBMP++;
-            if(tmpCh)
+            int16_t byte_index = i * (w / 8) + j / 8;
+            int16_t bit_index = j % 8;
+
+            if(bitmap[byte_index] & (1 << (7 - bit_index)))
             {
-                while(bL < 8)
-                {
-                    if(tmpCh & 0x01)
-                        ssd1306_draw_pixel(pX, pY + bL);
-                    tmpCh >>= 1;
-                    if(tmpCh)
-                        bL++;
-                    else
-                    {
-                        pX++;
-                        break;
-                    }
-                }
+                ssd1306_draw_pixel(x + j, y + i);
             }
-            else
-                pX++;
         }
-        pY += 8;
     }
 }
 
