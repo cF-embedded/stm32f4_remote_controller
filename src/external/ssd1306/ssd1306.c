@@ -14,10 +14,22 @@
 /* I2C adress of ssd1306 display */
 #define SSD1306_I2C_ADRESS 0x3C
 
+/* SSD1306 Width in pixels */
+#define SSD1306_WIDTH 128
+/* SSD1306 Height in pixels */
+#define SSD1306_HEIGHT 64
+
+/* Special char to send before command */
+#define SSD1306_COMMAND 0x00
+
+/* Special char to send before data */
+#define SSD1306_DATA 0x40
+
 /* Buffer to contain pixels color on oled display*/
-#define BUFFER_SIZE (SSD1306_WIDTH * ((SSD1306_HEIGHT + 7) / 8))
+#define BUFFER_SIZE (SSD1306_WIDTH * (SSD1306_HEIGHT / 8) + 1)
 
 /* buffer to hold sent pixels */
+/* first element = SSD1306_DATA */
 static uint8_t buffer[BUFFER_SIZE];
 
 /**
@@ -37,67 +49,67 @@ static void ssd1306_write_data(uint8_t* data, size_t data_len);
 
 void ssd1306_init(void)
 {
-    ssd1306_write_command(0xAE);   // Set display OFF
+    ssd1306_write_command(SSD1306_DISPLAYOFF);
 
-    ssd1306_write_command(0xD5);   // Set Display Clock Divide Ratio / OSC Frequency
-    ssd1306_write_command(0x80);   // Display Clock Divide Ratio / OSC Frequency
+    ssd1306_write_command(SSD1306_SETDISPLAYCLOCKDIV);
+    ssd1306_write_command(0x80);
 
-    ssd1306_write_command(0xA8);   // Set Multiplex Ratio
-    ssd1306_write_command(0x3F);   // Multiplex Ratio for 128x64 (64-1)
+    ssd1306_write_command(SSD1306_SETMULTIPLEX);
+    ssd1306_write_command(SSD1306_HEIGHT - 1);
 
-    ssd1306_write_command(0xD3);   // Set Display Offset
-    ssd1306_write_command(0x00);   // Display Offset
+    ssd1306_write_command(SSD1306_SETDISPLAYOFFSET);
+    ssd1306_write_command(0x00);
 
-    ssd1306_write_command(0x40);   // Set Display Start Line
+    ssd1306_write_command(SSD1306_SETSTARTLINE);
 
-    ssd1306_write_command(0x22);   // Set page address
-    ssd1306_write_command(0x00);   // Start page address
-    ssd1306_write_command(0x07);   // End page address
+    ssd1306_write_command(SSD1306_CHARGEPUMP);
+    ssd1306_write_command(0x14);
 
-    ssd1306_write_command(0x21);                // Set column address
-    ssd1306_write_command(0x00);                // Start column address
-    ssd1306_write_command(SSD1306_WIDTH - 1);   // End column address
+    ssd1306_write_command(SSD1306_MEMORYMODE);
+    ssd1306_write_command(0x00);
 
-    ssd1306_write_command(0x8D);   // Set Charge Pump
-    ssd1306_write_command(0x14);   // Charge Pump (0x10 External, 0x14 Internal DC/DC)
+    ssd1306_write_command(SSD1306_SEGREMAP | 0x10);
+    ssd1306_write_command(SSD1306_WIDTH - 1);
 
-    ssd1306_write_command(0xA1);   // Set Segment Re-Map
-    ssd1306_write_command(0xC8);   // Set Com Output Scan Direction
+    ssd1306_write_command(SSD1306_COMSCANDEC);
 
-    ssd1306_write_command(0xDA);   // Set COM Hardware Configuration
-    ssd1306_write_command(0x12);   // COM Hardware Configuration
+    ssd1306_write_command(SSD1306_SETCOMPINS);
+    ssd1306_write_command(0x12);
 
-    ssd1306_write_command(0x81);   // Set Contrast
-    ssd1306_write_command(0xFF);   // Contrast
+    ssd1306_write_command(SSD1306_SETCONTRAST);
+    ssd1306_write_command(0x7F);
 
-    ssd1306_write_command(0xD9);   // Set Pre-Charge Period
-    ssd1306_write_command(0xF1);   // Set Pre-Charge Period (0x22 External, 0xF1 Internal)
+    ssd1306_write_command(SSD1306_SETPRECHARGE);
+    ssd1306_write_command(0xF1);
 
-    ssd1306_write_command(0xDB);   // Set VCOMH Deselect Level
-    ssd1306_write_command(0x40);   // VCOMH Deselect Level
+    ssd1306_write_command(SSD1306_SETVCOMDETECT);
+    ssd1306_write_command(0x40);
 
-    ssd1306_write_command(0xA4);   // Set all pixels OFF
-    ssd1306_write_command(0xA6);   // Set display not inverted
-    ssd1306_write_command(0xAF);   // Set display On
+    ssd1306_write_command(SSD1306_DISPLAYALLON_RESUME);
+    ssd1306_write_command(SSD1306_NORMALDISPLAY);
+    ssd1306_write_command(SSD1306_DEACTIVATE_SCROLL);
 
-    /* Clear screen */
     ssd1306_clear_screen();
+    ssd1306_update_screen();
+
+    ssd1306_write_command(SSD1306_DISPLAYALLON);
+    ssd1306_write_command(SSD1306_DISPLAYON);
 }
 
 void ssd1306_clear_screen(void)
 {
-    memset(buffer, 0xFF, BUFFER_SIZE);
+    memset(buffer, 0x00, BUFFER_SIZE);
 }
 
 void ssd1306_update_screen(void)
 {
-    ssd1306_write_command(0x22);
-    ssd1306_write_command(0x00);   // Start page address
-    ssd1306_write_command(0x07);   // End page address
+    ssd1306_write_command(SSD1306_PAGEADDR);
+    ssd1306_write_command(0x00);
+    ssd1306_write_command(0xFF);
 
-    ssd1306_write_command(0x21);
-    ssd1306_write_command(0x00);                // Start column address
-    ssd1306_write_command(SSD1306_WIDTH - 1);   // End column address
+    ssd1306_write_command(SSD1306_COLUMNADDR);
+    ssd1306_write_command(0x00);
+    ssd1306_write_command(SSD1306_WIDTH - 1);
 
     ssd1306_write_data(buffer, BUFFER_SIZE);
 }
@@ -110,10 +122,10 @@ void ssd1306_draw_pixel(uint8_t x, uint8_t y)
         return;
     }
 
-    buffer[x + (y / 8) * SSD1306_WIDTH] |= (1 << (y & 7));
+    buffer[(x + (y / 8) * SSD1306_WIDTH) + 1] |= (1 << (((SSD1306_HEIGHT - 1) - y) & 7));
 }
 
-void ssd1306_DrawBitmap(uint8_t X, uint8_t Y, uint8_t W, uint8_t H, const uint8_t* pBMP)
+void ssd1306_draw_bitmap(uint8_t X, uint8_t Y, uint8_t W, uint8_t H, const uint8_t* pBMP)
 {
     uint8_t pX;
     uint8_t pY;
@@ -153,10 +165,17 @@ void ssd1306_DrawBitmap(uint8_t X, uint8_t Y, uint8_t W, uint8_t H, const uint8_
 
 static void ssd1306_write_command(uint8_t command)
 {
-    i2c_master_write(&command, SSD1306_I2C_ADRESS, 1);
+    uint8_t tmp_buf[2];
+
+    tmp_buf[0] = SSD1306_COMMAND;
+    tmp_buf[1] = command;
+
+    i2c_master_write(tmp_buf, SSD1306_I2C_ADRESS, 2);
 }
 
 static void ssd1306_write_data(uint8_t* data, size_t data_len)
 {
+    data[0] = SSD1306_DATA;
+
     i2c_master_write(data, SSD1306_I2C_ADRESS, data_len);
 }
