@@ -9,11 +9,13 @@
  */
 
 #include "display.h"
+#include "battery_bitmap.h"
 #include "hm_10.h"
 #include "i2c_master.h"
 #include "platform_specific.h"
 #include "speedometer_bitmap.h"
 #include "ssd1306.h"
+#include <stdio.h>
 
 static TaskHandle_t display_handle;
 
@@ -28,6 +30,13 @@ typedef enum
  *
  */
 static void display_show_speedometer_screen(void);
+
+/**
+ * @brief show battery screen on display
+ *
+ */
+static void display_show_battery_screen(void);
+
 /**
  * @brief Display task handler.
  *
@@ -61,9 +70,23 @@ void display_show_speedometer_screen(void)
     hm_10_read_buf(&speed, 1);
 
     ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, "200");
-
-    ssd1306_update_screen();
 }
+
+void display_show_battery_screen(void)
+{
+    char* vbat_str[5];
+
+    ssd1306_draw_bitmap(BATTERY_BITMAP_AREA_X, BATTERY_BITMAP_AREA_Y, BATTERY_BITMAP_AREA_WIDTH, BATTERY_BITMAP_AREA_HEIGHT, battery_bitmap);
+
+    ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, "2.8V");
+    float vbat = 2.9;
+
+    snprintf(vbat_str, sizeof(vbat_str), "%.1f", vbat);
+    strcat(vbat_str, "V");
+
+    ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, vbat_str);
+}
+
 static void ssd1306_init_task(void* params)
 {
     (void)params;
@@ -102,10 +125,12 @@ static void display_task(void* params)
 
             case BATTERY_SCREEN:
             {
+                display_show_battery_screen();
                 break;
             }
         }
 
+        ssd1306_update_screen();
         rtos_delay_until(&ticks, 100);
     }
 }
