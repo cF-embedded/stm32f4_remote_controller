@@ -116,13 +116,14 @@ void ssd1306_update_screen(void)
 
 void ssd1306_draw_pixel(uint8_t x, uint8_t y)
 {
-    if(x >= SSD1306_WIDTH || y >= SSD1306_HEIGHT)
+    if(x >= (SSD1306_WIDTH + 1) || y >= (SSD1306_HEIGHT + 1))
     {
         /* Prevent writing outside buffer */
         return;
     }
 
-    buffer[(x + (y / 8) * SSD1306_WIDTH) + 1] |= (1 << (((SSD1306_HEIGHT - 1) - y) & 7));
+    uint8_t y_offset = (SSD1306_HEIGHT - 1) - y;
+    buffer[(x + (y_offset / 8) * SSD1306_WIDTH) + 1] |= (1 << (y_offset & 7));
 }
 
 void ssd1306_draw_bitmap(uint8_t X, uint8_t Y, uint8_t W, uint8_t H, const uint8_t* pBMP)
