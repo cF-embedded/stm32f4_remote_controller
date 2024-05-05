@@ -15,6 +15,7 @@
 #include "platform_specific.h"
 #include "speedometer_bitmap.h"
 #include "ssd1306.h"
+#include "stdio.h"
 #include "string.h"
 
 static TaskHandle_t display_handle;
@@ -77,12 +78,16 @@ void display_show_speedometer_screen(void)
 
 void display_show_battery_screen(void)
 {
-    // static uint8_t vbat = 0;
-    // static uint8_t* vbat[5];
+    uint8_t* vbat_str[5];
+
     ssd1306_draw_bitmap(BATTERY_BITMAP_AREA_X, BATTERY_BITMAP_AREA_Y, BATTERY_BITMAP_AREA_WIDTH, BATTERY_BITMAP_AREA_HEIGHT, battery_bitmap);
 
-    // strcat(vbat, "V");
-    ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, "2.8V");
+    float vbat = 2.9;
+
+    snprintf(vbat_str, sizeof(vbat_str), "%.1f", vbat);
+    strcat(vbat_str, "V");
+
+    ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, vbat_str);
 }
 
 static void ssd1306_init_task(void* params)
@@ -102,7 +107,7 @@ static void display_task(void* params)
 
     tick_t ticks;
 
-    display_screen_e_t act_screen = SPEEDOMETER_SCREEN;
+    display_screen_e_t act_screen = BATTERY_SCREEN;
 
     /* Suspend display task befor ssd1306 initialize */
     vTaskSuspend(NULL);

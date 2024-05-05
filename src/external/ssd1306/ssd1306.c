@@ -57,14 +57,6 @@ static void ssd1306_write_data(uint8_t* data, size_t data_len);
  */
 static void ssd1306_draw_char(uint8_t x, uint8_t y, char c);
 
-/**
- * @brief Drawing rectangle in the selected position
- *
- * @param x
- * @param y
- */
-static void ssd1306_draw_fill_rectangle(uint8_t x, uint8_t y);
-
 void ssd1306_init(void)
 {
     ssd1306_write_command(SSD1306_DISPLAYOFF);
