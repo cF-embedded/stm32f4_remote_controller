@@ -8,6 +8,7 @@
  */
 
 #include "ssd1306.h"
+#include "font_ascii_5x7.h"
 #include "i2c_master.h"
 #include <string.h>
 
@@ -46,6 +47,23 @@ static void ssd1306_write_command(uint8_t command);
  * @param data_len
  */
 static void ssd1306_write_data(uint8_t* data, size_t data_len);
+
+/**
+ * @brief Drawing char in the selected position
+ *
+ * @param x - offset
+ * @param y - offset
+ * @param c - character
+ */
+static void ssd1306_draw_char(uint8_t x, uint8_t y, char c);
+
+/**
+ * @brief Drawing rectangle in the selected position
+ *
+ * @param x
+ * @param y
+ */
+static void ssd1306_draw_fill_rectangle(uint8_t x, uint8_t y);
 
 void ssd1306_init(void)
 {
@@ -135,10 +153,40 @@ void ssd1306_draw_bitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint8
         {
             int16_t byte_index = i * (w / 8) + j / 8;
             int16_t bit_index = j % 8;
-            
+
             if(bitmap[byte_index] & (1 << (7 - bit_index)))
             {
                 ssd1306_draw_pixel(x + j, y + i);
+            }
+        }
+    }
+}
+
+void ssd1306_draw_string(uint8_t x, uint8_t y, char* c)
+{
+    uint8_t offset = 0;
+
+    while(*c)
+    {
+        ssd1306_draw_char(x + offset, y, *c);
+        offset += (5 + 2);
+        c++;
+    }
+}
+
+void ssd1306_draw_char(uint8_t x, uint8_t y, char c)
+{
+    int8_t i, j;
+    uint8_t line;
+
+    for(i = 0; i < 5; i++)
+    {
+        line = (*(const unsigned char*)(&font[c * 5 + i]));
+        for(j = 0; j <= 7; j++, line >>= 1)
+        {
+            if(line & 1)
+            {
+                ssd1306_draw_pixel(x + i, y + j);
             }
         }
     }
