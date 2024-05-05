@@ -91,6 +91,8 @@ void ssd1306_init(void)
 
     ssd1306_clear_screen();
 
+    ssd1306_update_screen();
+
     ssd1306_write_command(SSD1306_DISPLAYALLON);
     ssd1306_write_command(SSD1306_DISPLAYON);
 }
@@ -98,8 +100,6 @@ void ssd1306_init(void)
 void ssd1306_clear_screen(void)
 {
     memset(buffer, 0x00, BUFFER_SIZE);
-
-    ssd1306_update_screen();
 }
 
 void ssd1306_update_screen(void)
@@ -133,9 +133,10 @@ void ssd1306_draw_bitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint8
     {
         for(int16_t j = 0; j < w; ++j)
         {
-            int16_t byteIndex = i * (w / 8) + j / 8;
-            int16_t bitIndex = j % 8;
-            if(bitmap[byteIndex] & (1 << (7 - bitIndex)))
+            int16_t byte_index = i * (w / 8) + j / 8;
+            int16_t bit_index = j % 8;
+            
+            if(bitmap[byte_index] & (1 << (7 - bit_index)))
             {
                 ssd1306_draw_pixel(x + j, y + i);
             }

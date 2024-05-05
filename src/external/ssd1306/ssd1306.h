@@ -81,6 +81,6 @@ void ssd1306_draw_pixel(uint8_t x, uint8_t y);
  * @param H
  * @param pBMP
  */
-void ssd1306_draw_bitmap(uint8_t X, uint8_t Y, uint8_t W, uint8_t H, const uint8_t* pBMP);
+void ssd1306_draw_bitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint8_t* bitmap);
 
 #endif   // __SSD1306_H__

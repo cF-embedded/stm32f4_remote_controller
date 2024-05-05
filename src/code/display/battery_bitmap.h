@@ -16,11 +16,15 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-#define CHARGE_AREA_START_X 20
-#define CHARGE_AREA_START_Y 18
+/* Start of battery bitmap on oled x axis */
+#define BATTERY_BITMAP_AREA_X 1
+/* Start of battery bitmap on oled y axis */
+#define BATTERY_BITMAP_AREA_Y 1
 
-#define CHARGE_AREA_WIDTH  83
-#define CHARGE_AREA_HEIGHT 28
+/* Battery bitmap width on oled display */
+#define BATTERY_BITMAP_AREA_WIDTH 128
+/* Battery bitmap height on oled display */
+#define BATTERY_BITMAP_AREA_HEIGHT 64
 
     const uint8_t battery_bitmap[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
