@@ -2,21 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Cortex Debug",
-            "request": "launch",
             "type": "cortex-debug",
+            "request": "launch",
             "servertype": "openocd",
-            "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/src/out/${workspaceFolderBasename}.elf",
-            "device": "STM32F401xC",  
+            "cwd": "${workspaceFolder}",
+            "executable": "out/Debug/src/${workspaceFolderBasename}.elf",
+            "name": "Debug",
+            "svdFile": "${userHome}/.vscode/extensions/marus25.cortex-debug-dp-stm32f4-1.0.0/data/STM32F411xx.svd",
             "configFiles": [
-                "interface/stlink.cfg",
-                "target/stm32f4x.cfg" 
+                "interface/stlink-v2-1.cfg", "target/stm32f4x.cfg"
             ],
             "runToEntryPoint": "main",
-            "showDevDebugOutput": "both",
-            "interface": "swd"
-        }
+        },
     ]
 }
-

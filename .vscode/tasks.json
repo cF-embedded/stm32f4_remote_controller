@@ -2,17 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "main_program - first build",
+            "label": "first build",
             "type": "shell",
             "options": {
-                "cwd": "${workspaceFolder}/src"
+                "cwd": "${workspaceFolder}"
             },
             "command": "cmake",
             "args": [
                 "-G", "Ninja",
-                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-                "-B", "${workspaceFolder}/src/out",
-                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/src/cmake/gcc-arm-none-eabi.cmake",
+                "-B", "${workspaceFolder}/out/Debug",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/toolchain-arm-gcc.cmake",
             ],
             "group": {
                 "kind": "build",
@@ -20,32 +19,36 @@
             }
         },
         {
+            "label": "build project",
             "type": "shell",
-            "label": "main_program - compile",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "${workspaceFolder}/src/out", 
-                "-j", "8"
-            ],
+            "command": "ninja",
+            "args": ["-v"],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}/out/Debug"
             },
-            "problemMatcher": ["$gcc"],
-            "group": "build"
-        },       
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "base": "$gcc", 
+            }
+        },   
         {
+            "label": "clean project",
             "type": "shell",
-            "label": "main_program - clean project",
-            "command": "cmake",
-            "args": ["--build", "${workspaceFolder}/src/out", "--target", "clean"],
+            "command": "ninja",
+            "args": ["-v", "clean"],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}/out/Debug"
             },
-            "problemMatcher": []
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
-            "label": "main_program - flash-stlink",
+            "label": "flash-stlink",
             "type": "shell",
             "command": "ST-LINK_CLI",
             "args": [
@@ -53,7 +56,7 @@
                 "SWD",
                 "UR",
                 "-P",
-                "${workspaceFolder}/src/out/${workspaceFolderBasename}.hex",
+                "${workspaceFolder}/out/Debug/src/${workspaceFolderBasename}.hex",
                 "0x8000000",
                 "-V",
                 "after_programming",
@@ -61,7 +64,7 @@
                 "-Run"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/src/out"
+                "cwd": "${workspaceFolder}/out/Debug"
             },
             "dependsOn": "build-debug",
             "problemMatcher": [],
@@ -69,6 +72,19 @@
                 "kind": "build",
                 "isDefault": true
             }
-        }
+        },
+        {
+            "label": "run tests",
+            "type": "shell",
+            "command": "ctest",
+            "args": ["--verbose", "--output-on-failure"],
+            "options": {
+                "cwd": "${workspaceFolder}/out/Debug"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+        },
     ]
 }
