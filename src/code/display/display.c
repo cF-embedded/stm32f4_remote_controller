@@ -90,7 +90,7 @@ void display_show_battery_screen(void)
     ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, "2.8V");
     float vbat = 2.9;
 
-    snprintf(vbat_str, sizeof(vbat_str), "%.1f", vbat);
+    // snprintf(vbat_str, sizeof(vbat_str), "%.1f", vbat);
     strcat(vbat_str, "V");
 
     ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, vbat_str);
