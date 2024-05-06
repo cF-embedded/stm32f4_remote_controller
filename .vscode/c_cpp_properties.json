@@ -1,8 +1,8 @@
 {
     "configurations": [
         {
-            "name": "STM32",
-            "compileCommands": "${workspaceFolder}/src/out/compile_commands.json",
+            "name": "cmake",
+            "compileCommands": "${workspaceFolder}/out/Debug/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],

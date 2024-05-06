@@ -1,6 +1,7 @@
 {
-  "cmake.generator": "Ninja",
-  "C_Cpp.default.cStandard": "c11",
-  "C_Cpp.default.cppStandard": "c++17",
-  "cmake.configureOnOpen": false
+  "cmake.buildDirectory": "${workspaceFolder}/out/Debug",
+  "files.associations": {
+      "*.h": "c",
+      "*.c": "c"
+  },
 }
