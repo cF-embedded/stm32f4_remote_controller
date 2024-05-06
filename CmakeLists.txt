@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.17)
+
+enable_language(ASM)
+
+project(stm32f4_remote_controller)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include(CTest)
+# tests subdirectories #
+add_subdirectory(test/unit_test/unity unity)
+add_subdirectory(test/unit_test/template)
+
+# main platform program subdirectory #
+add_subdirectory(src)
