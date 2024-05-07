@@ -10,6 +10,7 @@
 
 #include "hm_10.h"
 #include "hm_10_init_commands.h"
+#include "joystick_controller.h"
 #include "usart.h"
 #include <string.h>
 
@@ -84,6 +85,10 @@ static void hm_10_at_init_task(void* params)
 
         rtos_delay_until(&tick_cnt, AT_COMMAND_DELAY);
     }
+
+    /* Resume joystick tasks after hm-10 initialization */
+    vTaskResume(joystick_send_speed_handle);
+    vTaskResume(joystick_send_angle_handle);
 
     vTaskSuspend(NULL);
 }
