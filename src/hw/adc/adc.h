@@ -19,6 +19,7 @@
 #include "platform_specific.h"
 
 /* Order is dependent on channel sequence programmed in ADC */
+
 /** Speed controller id. */
 #define ADC_SPEED_CONTROLLER 0
 /** Angle controller id. */
@@ -49,5 +50,15 @@ void adc_init(void);
  * @return                  ADC value.
  */
 int32_t adc_val_get(int32_t id);
+
+/**
+ * @brief Convesrion adc to value in specific range
+ *
+ * @param id                ADC id.
+ * @param max_val           Maximum value
+ * @param min_val           Minimum value
+ * @return int32_t          Value in specific range
+ */
+int32_t adc_to_value(int32_t id, int32_t max_val, int32_t min_val);
 
 #endif /* _ADC_H_ */

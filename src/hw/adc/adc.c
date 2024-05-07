@@ -16,19 +16,19 @@
 #include "adc.h"
 #include "gpio_f4.h"
 
-/** Speed controller pin number - PA0. */
+/** Speed controller pin number - PC0. */
 #define SPEED_CONTROLLER_PIN 0
-/** Angle controller pin number - PA1. */
+/** Angle controller pin number - PC1. */
 #define ANGLE_CONTROLLER_PIN 1
-/** Battery monitor pin number -  PA2. */
+/** Battery monitor pin number -  PC2. */
 #define V_BAT_PIN 2
 
-/** Front right phototransistor ADC channel. */
-#define SPEED_CONTROLLER_CHANNEL 0
-/** Diagonal right phototransistor ADC channel. */
-#define ANGLE_CONTROLLER_CHANNEL 1
+/** Speed controller ADC channel. */
+#define SPEED_CONTROLLER_CHANNEL 10
+/** Angle controller ADC channel. */
+#define ANGLE_CONTROLLER_CHANNEL 11
 /** Battery monitor ADC channel. */
-#define V_BAT_CHANNEL 2
+#define V_BAT_CHANNEL 12
 
 /** DMA stream used for ADC. */
 #define ADC_DMA DMA2_Stream0
@@ -69,15 +69,13 @@
 
 /** Sample time 144 cycles of ADCCLK. */
 #define ADC_SMP_144_CYCLES 6
-/** Sample time 480 cycles of ADCCLK. */
-#define ADC_SMP_480_CYCLES 7
 
-/** Offset of bitfield SMP0 in ADC_SPMR2 register. */
-#define ADC_SMPR2_SMP0_BIT 0
-/** Offset of bitfield SMP1 in ADC_SPMR2 register. */
-#define ADC_SMPR2_SMP1_BIT 3
-/** Offset of bitfield SMP2 in ADC_SPMR2 register. */
-#define ADC_SMPR2_SMP2_BIT 6
+/** Offset of bitfield SMP10 in ADC_SPMR2 register. */
+#define ADC_SMPR1_SMP10_BIT 0
+/** Offset of bitfield SMP8 in ADC_SPMR2 register. */
+#define ADC_SMPR1_SMP11_BIT 3
+/** Offset of bitfield SMP9 in ADC_SPMR2 register. */
+#define ADC_SMPR1_SMP12_BIT 6
 
 /** Offset of bitfield LEN in ADC_SQR1 register. */
 #define ADC_SQR1_LEN_BIT 20
@@ -102,9 +100,10 @@
 #define ADC_BUF_SIZE 3
 
 /**
- * Array storing measured ADC values.
+ * Array storing actual measured ADC values.
  */
 static int32_t adc_buf[ADC_BUF_SIZE];
+
 /**
  * GPIO initialization for ADC.
  */
@@ -129,16 +128,35 @@ void adc_init(void)
 
 int32_t adc_val_get(int32_t id)
 {
+    if(id < 0 || id >= ADC_BUF_SIZE)
+    {
+        return -EINVAL;
+    }
+
     return adc_buf[id];
+}
+
+int32_t adc_to_value(int32_t id, int32_t max_val, int32_t min_val)
+{
+    int32_t adc_val, specific_val, adc_val_diff, specific_val_diff = {0};
+
+    adc_val = adc_val_get(id);
+
+    adc_val_diff = (ADC_MAX_VAL - ADC_MIN_VAL);
+    specific_val_diff = (max_val - min_val);
+
+    specific_val = ((adc_val - ADC_MIN_VAL) * specific_val_diff / adc_val_diff) + min_val;
+
+    return specific_val;
 }
 
 static void gpio_init(void)
 {
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 
-    gpio_mode_config(GPIOA, SPEED_CONTROLLER_PIN, GPIO_MODE_ANALOG);
-    gpio_mode_config(GPIOA, ANGLE_CONTROLLER_PIN, GPIO_MODE_ANALOG);
-    gpio_mode_config(GPIOA, V_BAT_PIN, GPIO_MODE_ANALOG);
+    gpio_mode_config(GPIOC, SPEED_CONTROLLER_PIN, GPIO_MODE_ANALOG);
+    gpio_mode_config(GPIOC, ANGLE_CONTROLLER_PIN, GPIO_MODE_ANALOG);
+    gpio_mode_config(GPIOC, V_BAT_PIN, GPIO_MODE_ANALOG);
 }
 
 static void dma_init(void)
@@ -174,11 +192,11 @@ static void adc1_init(void)
         ADC_CR2_DDS |         /* DMA dont stop after first conversion */
         ADC_CR2_CONT;         /* Enable continuous conversion */
 
-    /* Set sampling time to 144 cycles for channels 0 - 2 */
-    ADC1->SMPR2 = (ADC_SMP_144_CYCLES << ADC_SMPR2_SMP0_BIT) | (ADC_SMP_144_CYCLES << ADC_SMPR2_SMP1_BIT) | (ADC_SMP_144_CYCLES << ADC_SMPR2_SMP2_BIT);
+    /* Set sampling time to 144 cycles for channels 10 - 12 */
+    ADC1->SMPR1 = (ADC_SMP_144_CYCLES << ADC_SMPR1_SMP10_BIT) | (ADC_SMP_144_CYCLES << ADC_SMPR1_SMP11_BIT) | (ADC_SMP_144_CYCLES << ADC_SMPR1_SMP12_BIT);
 
     /* Set 3 conversions on channels 0 - 2 */
-    ADC1->SQR1 = (ADC_BUF_SIZE << ADC_SQR1_LEN_BIT);
+    ADC1->SQR1 = ((ADC_BUF_SIZE - 1) << ADC_SQR1_LEN_BIT);
     ADC1->SQR3 = (SPEED_CONTROLLER_CHANNEL << ADC_SQR3_SQ1_BIT) | (ANGLE_CONTROLLER_CHANNEL << ADC_SQR3_SQ2_BIT) | (V_BAT_CHANNEL << ADC_SQR3_SQ3_BIT);
 
     ADC1->CR2 |= ADC_CR2_ADON;
