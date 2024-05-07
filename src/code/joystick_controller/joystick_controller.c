@@ -9,46 +9,27 @@
 
 #include "joystick_controller.h"
 #include "adc.h"
+#include "hm_10.h"
 #include "platform_specific.h"
+#include "string.h"
 #include <stdlib.h>
 
+/* Handle for joystick send speed task */
+TaskHandle_t joystick_send_speed_handle;
+/* Handle for joystick send angle task */
+TaskHandle_t joystick_send_angle_handle;
+
+/* Maximum motor speed */
+#define JOYSTICK_SPEED_MAX 200
+
+/* Maximum servo angle */
+#define JOYSTICK_ANGLE_MAX 90
+
 /* Control buffer len -
-   0 - "A" - Angle or "S" Speed
-   1 -  "-" - Negative or "+" Positivie
-   3 - Value from params struct range   */
+   0 - "A" - Angle or "S" - Speed
+   1 -  "-" - Negative or "+" - Positivie
+   3 - Value to send in decimal uint8_t */
 #define CONTROL_BUFF_LEN 3
-
-typedef struct
-{
-    const int32_t MAX_SPEED;
-    const int32_t MIN_SPEED;
-} speed_params_s_t;
-
-typedef struct
-{
-    const int32_t MAX_ANGLE;
-    const int32_t MIN_ANGLE;
-} angle_params_s_t;
-
-static speed_params_s_t speed_params = {.MAX_SPEED = 200, .MIN_SPEED = -200};
-
-static angle_params_s_t angle_params = {.MAX_ANGLE = 90, .MIN_ANGLE = -90};
-
-/**
- * @brief function convert adc val to speed params range
- *
- * @param adc_id
- * @return int32_t Measure speed value
- */
-static int32_t joystick_control_adc2speed(uint8_t adc_id, speed_params_s_t _speed_params);
-
-/**
- * @brief function convert adc val to angle params range
- *
- * @param adc_id
- * @return int32_t - Measure angle value
- */
-static int32_t joystick_control_adc2angle(uint8_t adc_id, angle_params_s_t _angle_params);
 
 /**
  * @brief
@@ -72,35 +53,39 @@ static void joystick_control_send_speed(void* params);
  */
 static void joystick_control_send_angle(void* params);
 
+/**
+ * @brief Set controll buffer to send
+ *
+ * @param buff - to send
+ * @param val - measured adc value
+ * @return int16_t - Error code
+ */
+static int16_t joystick_set_control_buff(uint8_t* buff, int16_t val);
+
 void joystick_control_task_init(void)
 {
     adc_init();
 
-    rtos_task_create(joystick_control_send_speed, "joystick_send_speed", JOYSTICK_CONTROLLER_SPEED_STACKSIZE, JOYSTICK_CONTROLLER_SPEED_PRIORITY, NULL);
-    rtos_task_create(joystick_control_send_angle, "joystick_send_angle", JOYSTICK_CONTROLLER_ANGLE_STACKSIZE, JOYSTICK_CONTROLLER_ANGLE_PRIORITY, NULL);
+    rtos_task_create(joystick_control_send_speed, "joystick_send_speed", JOYSTICK_CONTROLLER_SPEED_STACKSIZE, JOYSTICK_CONTROLLER_SPEED_PRIORITY, &joystick_send_speed_handle);
+    rtos_task_create(joystick_control_send_angle, "joystick_send_angle", JOYSTICK_CONTROLLER_ANGLE_STACKSIZE, JOYSTICK_CONTROLLER_ANGLE_PRIORITY, &joystick_send_angle_handle);
 }
 
-static int32_t joystick_control_adc2speed(uint8_t adc_id, speed_params_s_t _speed_params)
-{
-    int32_t adc_val = adc_val_get(adc_id);
-
-    int32_t adc2speed = ((adc_val - ADC_MIN_VAL) * (_speed_params.MAX_SPEED - _speed_params.MIN_SPEED) / (ADC_MAX_VAL - ADC_MIN_VAL)) + _speed_params.MIN_SPEED;
-
-    return adc2speed;
-}
-
-static int32_t joystick_control_adc2angle(uint8_t adc_id, angle_params_s_t _angle_params)
-{
-    int32_t adc_val = adc_val_get(adc_id);
-
-    int32_t adc2angle = ((adc_val - ADC_MIN_VAL) * (_angle_params.MAX_ANGLE - _angle_params.MIN_ANGLE) / (ADC_MAX_VAL - ADC_MIN_VAL)) + _angle_params.MIN_ANGLE;
-
-    return adc2angle;
-}
-
-uint8_t joystick_control_get_sign_from_val(int32_t val)
+static uint8_t joystick_control_get_sign_from_val(int32_t val)
 {
     return (val >= 0) ? '+' : '-';
+}
+
+static int16_t joystick_set_control_buff(uint8_t* buff, int16_t val)
+{
+    if(buff == NULL)
+    {
+        return -EINVAL;
+    }
+
+    buff[CONTROL_BUFF_LEN - 2] = joystick_control_get_sign_from_val(val);
+    buff[CONTROL_BUFF_LEN - 1] = abs(val);
+
+    return 0;
 }
 
 static void joystick_control_send_speed(void* params)
@@ -108,20 +93,24 @@ static void joystick_control_send_speed(void* params)
     (void)params;
 
     uint8_t speed_control_buffer[CONTROL_BUFF_LEN] = {'S', 0, 0};
-    int32_t speed_val;
+    int16_t speed_val;
 
     tick_t tick_cnt;
+
+    vTaskSuspend(NULL);
 
     while(1)
     {
         tick_cnt = rtos_tick_count_get();
-        speed_val = joystick_control_adc2speed(ADC_SPEED_CONTROLLER, speed_params);
 
-        speed_control_buffer[1] = joystick_control_get_sign_from_val(speed_val);
-        speed_control_buffer[2] = abs(speed_val);
+        speed_val = adc_to_value(ADC_SPEED_CONTROLLER, JOYSTICK_SPEED_MAX, -JOYSTICK_SPEED_MAX);
 
-        // hm_10_send_buf(speed_control_buffer, CONTROL_BUFF_LEN);
-        rtos_delay_until(&tick_cnt, 20);
+        if(joystick_set_control_buff(speed_control_buffer, speed_val) == 0)
+        {
+            hm_10_send_buf(speed_control_buffer, CONTROL_BUFF_LEN);
+        }
+
+        rtos_delay_until(&tick_cnt, 15);
     }
 }
 
@@ -134,15 +123,18 @@ static void joystick_control_send_angle(void* params)
 
     tick_t tick_cnt;
 
+    vTaskSuspend(NULL);
+
     while(1)
     {
         tick_cnt = rtos_tick_count_get();
-        angle_val = joystick_control_adc2angle(ADC_ANGLE_CONTROLLER, angle_params);
+        angle_val = adc_to_value(ADC_ANGLE_CONTROLLER, JOYSTICK_ANGLE_MAX, -JOYSTICK_ANGLE_MAX);
 
-        angle_control_buffer[1] = joystick_control_get_sign_from_val(angle_val);
-        angle_control_buffer[2] = abs(angle_val);
+        if(joystick_set_control_buff(angle_control_buffer, angle_val) == 0)
+        {
+            hm_10_send_buf(angle_control_buffer, CONTROL_BUFF_LEN);
+        }
 
-        // hm_10_send_buf(angle_control_buffer, CONTROL_BUFF_LEN);
         rtos_delay_until(&tick_cnt, 10);
     }
 }
