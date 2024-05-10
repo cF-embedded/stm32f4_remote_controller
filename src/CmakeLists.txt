@@ -53,6 +53,7 @@ set(C_SRCS
     code/hm_10/hm_10.c
     code/joystick_controller/joystick_controller.c
     code/display/display.c
+    code/display/display_state_machine.c
     # main section
     initialization/initialization.c
     main.c
