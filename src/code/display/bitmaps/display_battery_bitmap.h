@@ -1,13 +1,13 @@
 /**
- * @file battery_bitmap.h
+ * @file display_battery_bitmap.h
  * @author cF-embedded (cf@embedded.pl)
  * @brief Battery bitmap to show percent of vbat
  *
  * @copyright Copyright (c) 2024
  *
  */
-#ifndef _BATTER_BITMAP_H
-#define _BATTER_BITMAP_H
+#ifndef _DISPLAY_BATTER_BITMAP_H
+#define _DISPLAY_BATTER_BITMAP_H
 
 #include "platform_specific.h"
 
@@ -60,4 +60,4 @@ extern "C"
 }
 #endif /* __cplusplus */
 
-#endif /* _BATTER_BITMAP_H */
+#endif /* _DISPLAY_BATTER_BITMAP_H */

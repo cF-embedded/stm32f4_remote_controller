@@ -8,13 +8,14 @@
  */
 
 #include "display_state_machine.h"
-#include "battery_bitmap.h"
 #include "button.h"
-#include "speedometer_bitmap.h"
+#include "display_battery_bitmap.h"
+#include "display_speedometer_bitmap.h"
 #include "ssd1306.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+
 
 /* display screen string buff size  */
 #define DISPLAY_STR_BUF_SIZE 4
