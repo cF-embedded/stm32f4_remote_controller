@@ -16,4 +16,10 @@
  */
 void display_state_machine_start(void);
 
+/**
+ * @brief initialization of display state machine
+ *
+ */
+void display_state_machine_init(void);
+
 #endif /* _DISPLAY_STATE_MACHINE_H */
