@@ -7189,7 +7189,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "FerriteBead"
+		(property "Value" "120R"
 			(at 95.25 182.8291 0)
 			(effects
 				(font
@@ -8792,7 +8792,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "DM-OLED096-636:MODULE_DM-OLED096-636"
+		(property "Footprint" "OLED-DISPLAY-128x64:MODULE_DM-OLED096-636"
 			(at 119.38 36.83 0)
 			(effects
 				(font
@@ -9466,7 +9466,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Inductor_SMD:L_7.3x7.3_H4.5"
+		(property "Footprint" "Inductor_SMD:L_01005_0402Metric"
 			(at 83.82 147.32 0)
 			(effects
 				(font
@@ -10833,7 +10833,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TPS61021ADSGR:SON50P200X200X80-9N"
+		(property "Footprint" "dc-dc_step-up:SON50P200X200X80-9N"
 			(at 83.82 165.1 0)
 			(effects
 				(font
