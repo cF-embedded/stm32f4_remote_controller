@@ -97,7 +97,7 @@ static void display_speedometer_screen(display_screen_s_t* speedometer_screen)
     {
         if(strcmp(speedometer_screen->act_measured_data, speedometer_screen->last_measured_data) != 0)
         {
-            ssd1306_clear_screen();
+            // ssd1306_clear_screen();
             ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, (char*)speedometer_screen->act_measured_data);
         }
     }
@@ -162,5 +162,6 @@ void display_state_machine_start(void)
         // }
     }
 
+    /* always update screen after drawing */
     ssd1306_update_screen();
 }
