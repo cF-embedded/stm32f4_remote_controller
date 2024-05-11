@@ -9,8 +9,7 @@
 
 #include "display_state_machine.h"
 #include "button.h"
-#include "display_battery_bitmap.h"
-#include "display_speedometer_bitmap.h"
+#include "display_state_machine_func.h"
 #include "display_state_machine_types.h"
 #include "ssd1306.h"
 #include <stdbool.h>
@@ -26,7 +25,11 @@ static display_screen_s_t speedometer_screen;
 /* struct with data for battery screen */
 static display_screen_s_t battery_screen;
 
-
+/**
+ * @brief Lookup table with screens callbacks and data structs
+ *
+ */
+static display_entry_t screen_table[MAX_SCREENS] = {{display_speedometer_screen, &speedometer_screen}, {display_battery_screen, &battery_screen}};
 
 /**
  * @brief Check the screen swap button
@@ -40,53 +43,6 @@ static uint32_t display_is_button_pressed(void);
  *
  */
 static void display_set_next_screen(void);
-
-/**
- * @brief Lookup table with screens callbacks and data structs
- *
- */
-static display_entry_t screen_table[MAX_SCREENS] = {{display_speedometer_screen, &speedometer_screen}, {display_battery_screen, &battery_screen}};
-
-static void display_speedometer_screen(display_screen_s_t* speedometer_screen)
-{
-    if(!speedometer_screen->is_bitmap_printed)
-    {
-        ssd1306_draw_bitmap(SPEEDOMETER_BITMAP_AREA_X, SPEEDOMETER_BITMAP_AREA_Y, SPEEDOMETER_BITMAP_AREA_WIDTH, SPEEDOMETER_BITMAP_AREA_HEIGHT, speedometer_bitmap);
-        ssd1306_draw_bitmap(MPH_BITMAP_AREA_X, MPH_BITMAP_AREA_Y, MPH_BITMAP_AREA_WIDTH, MPH_BITMAP_AREA_HEIGHT, mph_bitmap);
-
-        speedometer_screen->is_bitmap_printed = true;
-    }
-
-    if(hm_10_read_buf(speedometer_screen->act_measured_data, DISPLAY_STR_BUF_SIZE) > 0)
-    {
-        if(strcmp(speedometer_screen->act_measured_data, speedometer_screen->last_measured_data) != 0)
-        {
-            // ssd1306_clear_screen();
-            ssd1306_draw_string(SPEEDOMETER_STRING_AREA_X, SPEEDOMETER_STRING_AREA_Y, (char*)speedometer_screen->act_measured_data);
-        }
-    }
-
-    strcpy(speedometer_screen->last_measured_data, speedometer_screen->act_measured_data);
-}
-
-static void display_battery_screen(display_screen_s_t* battery_screen)
-{
-    if(!battery_screen->is_bitmap_printed)
-    {
-        ssd1306_draw_bitmap(BATTERY_BITMAP_AREA_X, BATTERY_BITMAP_AREA_Y, BATTERY_BITMAP_AREA_WIDTH, BATTERY_BITMAP_AREA_HEIGHT, battery_bitmap);
-
-        battery_screen->is_bitmap_printed = true;
-    }
-
-    char* vbat_str = "2.8";
-
-    float vbat = 2.9;
-
-    // snprintf(vbat_str, sizeof(vbat_str), "%.1f", vbat);
-    strcat(vbat_str, "V");
-
-    ssd1306_draw_string(BATTERY_STRING_AREA_X, BATTERY_STRING_AREA_Y, vbat_str);
-}
 
 static uint32_t display_is_button_pressed(void)
 {
@@ -118,12 +74,15 @@ void display_state_machine_start(void)
     if((current_screen >= 0) && (current_screen < MAX_SCREENS))
     {
         screen_table[current_screen].screen_func(screen_table[current_screen].screen_data);
+    }
 
-        // if(display_is_button_pressed())
-        // {
-        //     screen_table[current_screen].screen_data->is_bitmap_printed = false;
-        //     display_set_next_screen();
-        // }
+    if(display_is_button_pressed())
+    {
+        screen_table[current_screen].screen_data->is_bitmap_printed = false;
+
+        // ssd1306_clear_screen();
+
+        display_set_next_screen();
     }
 
     /* always update screen after drawing */

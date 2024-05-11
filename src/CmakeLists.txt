@@ -56,6 +56,7 @@ set(C_SRCS
     code/joystick_controller/joystick_controller.c
     code/display/display.c
     code/display/state_machine/display_state_machine.c
+    code/display/state_machine/display_state_machine_func.c
     # main section
     initialization/initialization.c
     main.c
