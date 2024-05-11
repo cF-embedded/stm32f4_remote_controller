@@ -11,36 +11,11 @@
 #include "button.h"
 #include "display_battery_bitmap.h"
 #include "display_speedometer_bitmap.h"
+#include "display_state_machine_types.h"
 #include "ssd1306.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-
-
-/* display screen string buff size  */
-#define DISPLAY_STR_BUF_SIZE 4
-
-typedef enum
-{
-    SPEEDOMETER_SCREEN = 0,
-    BATTERY_SCREEN,
-    MAX_SCREENS
-} display_screen_e_t;
-
-typedef struct
-{
-    bool is_bitmap_printed;
-    uint8_t act_measured_data[DISPLAY_STR_BUF_SIZE];
-    uint8_t last_measured_data[DISPLAY_STR_BUF_SIZE];
-} display_screen_s_t;
-
-typedef void (*display_callback_t)(const display_screen_s_t*);
-
-typedef struct
-{
-    display_callback_t screen_func;
-    display_screen_s_t* screen_data;
-} display_entry_t;
 
 /* current display screen for processing state machine */
 static display_screen_e_t current_screen;
@@ -51,19 +26,7 @@ static display_screen_s_t speedometer_screen;
 /* struct with data for battery screen */
 static display_screen_s_t battery_screen;
 
-/**
- * @brief show speedometer screen on display
- *
- * @param speedometer_screen
- */
-static void display_speedometer_screen(display_screen_s_t* speedometer_screen);
 
-/**
- * @brief show battery screen on display
- *
- * @param battery_screen
- */
-static void display_battery_screen(display_screen_s_t* battery_screen);
 
 /**
  * @brief Check the screen swap button
