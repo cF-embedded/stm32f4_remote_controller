@@ -14,27 +14,35 @@
 #include "string.h"
 #include <stdlib.h>
 
-/* Handle for joystick send speed task */
-TaskHandle_t joystick_send_speed_handle;
-/* Handle for joystick send angle task */
-TaskHandle_t joystick_send_angle_handle;
+/* Handle for joystick send measure task */
+TaskHandle_t joystick_send_measure_handle;
 
-/* Maximum motor speed */
-#define JOYSTICK_SPEED_MAX 200
+/* Joystick measure value in percentages */
+#define JOYSTICK_MEASURE_MAX 100
 
-/* Maximum servo angle */
-#define JOYSTICK_ANGLE_MAX 90
+/* Len of control buffer */
+#define CONTROL_BUF_LEN 3
 
-/* Control buffer len -
-   0 - "A" - Angle or "S" - Speed
-   1 -  "-" - Negative or "+" - Positivie
-   3 - Value to send in decimal uint8_t */
-#define CONTROL_BUFF_LEN 3
+/** "A" - Angle or "S" - Speed */
+#define CONTROL_CHAR_INDEX 0
+/** "-" - Negative or "+" - Positivie */
+#define CONTROL_SIGN_INDEX 1
+/** Measured value in percentages  */
+#define CONTROL_VAL_INDEX 2
+
+typedef struct
+{
+    uint8_t control_char;
+    uint8_t adc_id;
+} joystick_control_buf_s_t;
+
+/* Joystick table to contain control char for send message and id in adc buf */
+static joystick_control_buf_s_t joystick_send_table[] = {{.control_char = 'S', .adc_id = ADC_SPEED_CONTROLLER}, {.control_char = 'A', .adc_id = ADC_ANGLE_CONTROLLER}};
 
 /**
- * @brief
+ * @brief get positive or negative char from value
  *
- * @param val speed or angle value
+ * @param val
  * @return uint8_t '+' or '-'
  */
 static uint8_t joystick_control_get_sign_from_val(int32_t val);
