@@ -52,30 +52,23 @@ static uint8_t joystick_control_get_sign_from_val(int32_t val);
  *
  * @param Params - unused
  */
-static void joystick_control_send_speed(void* params);
+static void joystick_control_send_measure(void* params);
 
 /**
- * @brief Task angle send to rc car
- *
- * @param params - unused
- */
-static void joystick_control_send_angle(void* params);
-
-/**
- * @brief Set controll buffer to send
+ * @brief set control buffer characters before send
  *
  * @param buff - to send
- * @param val - measured adc value
- * @return int16_t - Error code
+ * @param val - measured value from adc
+ * @param control_char - control char as first character
+ * @return int16_t
  */
-static int16_t joystick_set_control_buff(uint8_t* buff, int16_t val);
+static int16_t joystick_set_control_buff(uint8_t* buff, int16_t val, uint8_t control_char);
 
 void joystick_control_task_init(void)
 {
     adc_init();
 
-    rtos_task_create(joystick_control_send_speed, "joystick_send_speed", JOYSTICK_CONTROLLER_SPEED_STACKSIZE, JOYSTICK_CONTROLLER_SPEED_PRIORITY, &joystick_send_speed_handle);
-    rtos_task_create(joystick_control_send_angle, "joystick_send_angle", JOYSTICK_CONTROLLER_ANGLE_STACKSIZE, JOYSTICK_CONTROLLER_ANGLE_PRIORITY, &joystick_send_angle_handle);
+    rtos_task_create(joystick_control_send_measure, "joystick_send_measure", JOYSTICK_CONTROLLER_STACKSIZE, JOYSTICK_CONTROLLER_PRIORITY, &joystick_send_measure_handle);
 }
 
 static uint8_t joystick_control_get_sign_from_val(int32_t val)
@@ -83,66 +76,47 @@ static uint8_t joystick_control_get_sign_from_val(int32_t val)
     return (val >= 0) ? '+' : '-';
 }
 
-static int16_t joystick_set_control_buff(uint8_t* buff, int16_t val)
+static int16_t joystick_set_control_buff(uint8_t* buf, int16_t val, uint8_t control_char)
 {
-    if(buff == NULL)
+    if(buf == NULL)
     {
         return -EINVAL;
     }
 
-    buff[CONTROL_BUFF_LEN - 2] = joystick_control_get_sign_from_val(val);
-    buff[CONTROL_BUFF_LEN - 1] = abs(val);
+    buf[CONTROL_CHAR_INDEX] = control_char;
+    buf[CONTROL_SIGN_INDEX] = joystick_control_get_sign_from_val(val);
+    buf[CONTROL_VAL_INDEX] = abs(val);
 
     return 0;
 }
 
-static void joystick_control_send_speed(void* params)
+static void joystick_control_send_measure(void* params)
 {
     (void)params;
 
-    uint8_t speed_control_buffer[CONTROL_BUFF_LEN] = {'S', 0, 0};
-    int16_t speed_val;
+    uint8_t control_buf[CONTROL_BUF_LEN];
+    int16_t send_val, send_table_size;
 
     tick_t tick_cnt;
 
     vTaskSuspend(NULL);
 
-    while(1)
-    {
-        tick_cnt = rtos_tick_count_get();
-
-        speed_val = adc_to_value(ADC_SPEED_CONTROLLER, JOYSTICK_SPEED_MAX, -JOYSTICK_SPEED_MAX);
-
-        if(joystick_set_control_buff(speed_control_buffer, speed_val) == 0)
-        {
-            hm_10_send_buf(speed_control_buffer, CONTROL_BUFF_LEN);
-        }
-
-        rtos_delay_until(&tick_cnt, 15);
-    }
-}
-
-static void joystick_control_send_angle(void* params)
-{
-    (void)params;
-
-    uint8_t angle_control_buffer[CONTROL_BUFF_LEN] = {'A', 0, 0};
-    int32_t angle_val;
-
-    tick_t tick_cnt;
-
-    vTaskSuspend(NULL);
+    send_table_size = (sizeof(joystick_send_table) / sizeof(joystick_send_table[0]));
 
     while(1)
     {
-        tick_cnt = rtos_tick_count_get();
-        angle_val = adc_to_value(ADC_ANGLE_CONTROLLER, JOYSTICK_ANGLE_MAX, -JOYSTICK_ANGLE_MAX);
-
-        if(joystick_set_control_buff(angle_control_buffer, angle_val) == 0)
+        for(uint8_t i = 0; i < send_table_size; i++)
         {
-            hm_10_send_buf(angle_control_buffer, CONTROL_BUFF_LEN);
-        }
+            tick_cnt = rtos_tick_count_get();
 
-        rtos_delay_until(&tick_cnt, 10);
+            send_val = adc_to_value(joystick_send_table[i].adc_id, JOYSTICK_MEASURE_MAX, -JOYSTICK_MEASURE_MAX);
+
+            if(joystick_set_control_buff(control_buf, send_val, joystick_send_table[i].control_char) == 0)
+            {
+                hm_10_send_buf(control_buf, CONTROL_BUF_LEN);
+            }
+
+            rtos_delay_until(&tick_cnt, 5);
+        }
     }
 }
