@@ -12,10 +12,8 @@
 
 #include "platform_specific.h"
 
-/* Handle for joystick send speed task */
-extern TaskHandle_t joystick_send_speed_handle;
-/* Handle for joystick send angle task */
-extern TaskHandle_t joystick_send_angle_handle;
+/* Handle for joystick send measure task */
+extern TaskHandle_t joystick_send_measure_handle;
 
 /**
  * @brief Initalization joystick speed and angle control task
