@@ -62,7 +62,7 @@ static void display_set_next_screen(void)
 void display_state_machine_init(void)
 {
     /* first screen after start display */
-    current_screen = SPEEDOMETER_SCREEN;
+    current_screen = BATTERY_SCREEN;
     /* clear screens data structs */
     memset(&speedometer_screen, 0, sizeof(display_screen_s_t));
 
@@ -78,9 +78,7 @@ void display_state_machine_start(void)
 
     if(display_is_button_pressed())
     {
-        screen_table[current_screen].screen_data->is_bitmap_printed = false;
-
-        // ssd1306_clear_screen();
+        ssd1306_clear_screen();
 
         display_set_next_screen();
     }

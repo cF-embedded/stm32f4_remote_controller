@@ -24,13 +24,12 @@ typedef enum
 /* struct with display data*/
 typedef struct
 {
-    bool is_bitmap_printed;
-    char act_measured_data[DISPLAY_STR_BUF_SIZE];
-    char last_measured_data[DISPLAY_STR_BUF_SIZE];
+    uint16_t act_measured_data;
+    uint16_t last_measured_data;
 } display_screen_s_t;
 
 /* display screen callback */
-typedef void (*display_callback_t)(const display_screen_s_t*);
+typedef void (*display_callback_t)(display_screen_s_t*);
 
 /* struct for Lookup Table with func and data */
 typedef struct

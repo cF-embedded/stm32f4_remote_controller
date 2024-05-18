@@ -10,6 +10,7 @@
 
 #include "display.h"
 #include "button.h"
+#include "display_state_machine.h"
 #include "hm_10.h"
 #include "i2c_master.h"
 #include "platform_specific.h"
