@@ -10,16 +10,22 @@ set(INCLUDE_DIRS
     external/stm32
     external/FreeRTOS/include
     external/cmsis
+    external/ssd1306
     # hw
     hw/core_init
     hw/gpio_f4
     hw/usart
     hw/adc
+    hw/i2c_master
+    hw/button
     # utils
     utils
     # code
     code/hm_10
     code/joystick_controller
+    code/display/bitmaps
+    code/display/state_machine
+    code/display
     # main section
     initialization
 )
@@ -36,15 +42,21 @@ set(C_SRCS
     external/FreeRTOS/queue.c
     external/FreeRTOS/tasks.c
     external/FreeRTOS/timers.c
+    external/ssd1306/ssd1306.c
     # hw 
     hw/startup/hardfault.c
     hw/core_init/core_init.c
     hw/gpio_f4/gpio_f4.c
     hw/usart/usart.c
     hw/adc/adc.c
+    hw/i2c_master/i2c_master.c
+    hw/button/button.c
     # code
     code/hm_10/hm_10.c
     code/joystick_controller/joystick_controller.c
+    code/display/display.c
+    code/display/state_machine/display_state_machine.c
+    code/display/state_machine/display_state_machine_func.c
     # main section
     initialization/initialization.c
     main.c

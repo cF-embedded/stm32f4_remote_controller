@@ -26,8 +26,24 @@
 /** Position estimation task priority */
 #define JOYSTICK_CONTROLLER_PRIORITY (tskIDLE_PRIORITY + 8)
 
+/** SSD1306 initialization stacksize */
+#define SSD1306_INIT_STACKSIZE (configMINIMAL_STACK_SIZE * 2)
+/** SSD1306 initialization priority */
+#define SSD1306_INIT_PRIORITY (tskIDLE_PRIORITY + 10)
+
+/** Display batter stacksize */
+#define DISPLAY_STACKSIZE (configMINIMAL_STACK_SIZE * 10)
+/** Display battery priority */
+#define DISPLAY_PRIORITY (tskIDLE_PRIORITY + 5)
+
 /* USART HW priority */
-#define USART_PRIORITY 8
+#define USART_PRIORITY 7
+/** DMA on I2C TX HW priority */
+#define DMA_I2C_TX_PRIORITY 8
+/** I2C1 Event HW priority */
+#define I2C1_EV_PRIORITY 8
+/** I2C1 Event HW priority */
+#define EXTI_PRIORITY 9
 
 /**
  * @}
