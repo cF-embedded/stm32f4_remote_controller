@@ -1,0 +1,178 @@
+(ExpressProject "TPS61021A_TRANS"
+  (ProjectVersion "19981106")
+  (ProjectType "Analog or A/D Mixed Mode")
+  (Folder "Design Resources"
+    (Folder "Library"
+      (File ".\tps61021a_trans.olb"
+        (Type "Schematic Library")))
+    (NoModify)
+    (File "tps61021a_trans.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (RootChangedForceReNetlist "x")
+    (PSPICE_Regenerate_Netlist_Flag "FALSE")
+    (Netlist_TAB "4")
+    (PSPICE_Output_File "TPS61021_TRANS_new.LIB")
+    (PSPICE_View_Output "FALSE")
+    (PSPICE_Subcircuit_Format "TRUE")
+    (PSPICE_Do_DRC_Markers "FALSE")
+    (PSPICE_Net_Name_Pref "TRUE")
+    (PSPICE_Hier_Format "FALSE")
+    (PSPICE_Hier_Descend "TRUE")
+    (PSPICE_Hier_DoNot_Descend "FALSE")
+    (PSPICE_Alt_Template "PSpiceTemplate"))
+  (Folder "Outputs")
+  (Folder "PSpice Resources"
+    (Folder "Simulation Profiles"
+      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
+         ".\tps61021a_trans-pspicefiles\startup\tran.sim"
+        (DisplayName "STARTUP-tran")
+        (Type "PSpice Profile"))
+      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
+         ".\tps61021a_trans-pspicefiles\steadystate\tran.sim"
+        (DisplayName "STEADYSTATE-tran")
+        (Type "PSpice Profile"))
+      (ActiveProfile ".\tps61021a_trans-pspicefiles\startup\tran.sim"))
+    (Folder "Model Libraries"
+      (Sort User)
+      (File ".\tps61021a_trans.lib"
+        (Type "PSpiceLibrary")
+        (DisplayName ".\tps61021a_trans.lib")))
+    (Folder "Stimulus Files"
+      (Sort User))
+    (Folder "Include Files"
+      (Sort User)))
+  (DefaultLibraryBrowseDirectory "library\PSpice")
+  (PartMRUSelector
+    (TPS61021A_TRANS
+      (FullPartName "TPS61021A_TRANS.Normal")
+      (LibraryName
+         "C:\USERS\X0232442\DESKTOP\QC\TPS61021A\RELEASE_KARMIC\PSPICE\TPS61021A_PSPICE_TRANS\TPS61021A_TRANS.OLB")
+      (DeviceIndex "0"))
+    (0
+      (LibraryName "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (R
+      (FullPartName "R.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (TPS61021_TRANS
+      (FullPartName "TPS61021_TRANS.Normal")
+      (LibraryName
+         "C:\ELABTRANS_WS\ELABTRANS_DS\PART_NUMBERS\TPS61021A\ACTIVE_WORK_SANKALP\EXPERIMENTS\MODEL_16P2\TPS61021_PSPICE_TRANS\TPS61021_TRANS.OLB")
+      (DeviceIndex "0"))
+    (ABM/I
+      (FullPartName "ABM/I.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\ABM.OLB")
+      (DeviceIndex "0"))
+    (BUF_BASIC_GEN
+      (FullPartName "BUF_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\PSPICE_SUBBLK_LIB_WS\PSPICE_SUBBLK_LIB_DS\PSPICE_SUBBLK_LIB\SB02_SUBBLOCKBASIC\SB0101_LOGIC\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (IDC
+      (FullPartName "IDC.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.6\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (VDC
+      (FullPartName "VDC.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (IPULSE
+      (FullPartName "IPULSE.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (IPWL
+      (FullPartName "IPWL.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (OR3_BASIC_GEN
+      (FullPartName "OR3_BASIC_GEN.Normal")
+      (LibraryName "E:\INTERNALLIBRARIES\SB0101_LOGIC\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (AND3_BASIC_GEN
+      (FullPartName "AND3_BASIC_GEN.Normal")
+      (LibraryName "E:\INTERNALLIBRARIES\SB0101_LOGIC\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (COMP_BASIC_GEN
+      (FullPartName "COMP_BASIC_GEN.Normal")
+      (LibraryName "E:\INTERNALLIBRARIES\SB0102_COMPARATORS\COMPARATOR_GEN.OLB")
+      (DeviceIndex "0"))
+    (MbreakN3
+      (FullPartName "MbreakN3.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\BREAKOUT.OLB")
+      (DeviceIndex "0"))
+    (OR2_BASIC_GEN
+      (FullPartName "OR2_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\PSPICE_SUBBLK_LIB_WS\PSPICE_SUBBLK_LIB_DS\PSPICE_SUBBLK_LIB\SB02_SUBBLOCKBASIC\SB0101_LOGIC\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (INV_BASIC_GEN
+      (FullPartName "INV_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\PSPICE_SUBBLK_LIB_WS\PSPICE_SUBBLK_LIB_DS\PSPICE_SUBBLK_LIB\SB02_SUBBLOCKBASIC\SB0101_LOGIC\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (S
+      (FullPartName "S.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (ETABLE
+      (FullPartName "ETABLE.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\ABM.OLB")
+      (DeviceIndex "0"))
+    (F
+      (FullPartName "F.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (COMPHYS_BASIC_GEN
+      (FullPartName "COMPHYS_BASIC_GEN.Normal")
+      (LibraryName "E:\INTERNALLIBRARIES\SB0102_COMPARATORS\COMPARATOR_GEN.OLB")
+      (DeviceIndex "0"))
+    (EVALUE
+      (FullPartName "EVALUE.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\ABM.OLB")
+      (DeviceIndex "0"))
+    (ABM2
+      (FullPartName "ABM2.Normal")
+      (LibraryName "C:\CADENCE\SPB_16.0\TOOLS\CAPTURE\LIBRARY\PSPICE\ABM.OLB")
+      (DeviceIndex "0"))
+    (G
+      (FullPartName "G.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\DEMO\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (VPULSE
+      (FullPartName "VPULSE.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (D_D
+      (FullPartName "D_D.Normal")
+      (LibraryName
+         "C:\PSPICE_SUBBLK_LIB_WS\PSPICE_SUBBLK_LIB_DS\PSPICE_SUBBLK_LIB\SB02_SUBBLOCKBASIC\SB0204_DIODES\DIODES.OLB")
+      (DeviceIndex "0")))
+  (MPSSessionName "x0232442")
+  (LastUsedLibraryBrowseDirectory
+     "E:\PSPICE MODELS\BOOST\TPS61021\Active_Work_KarMic\PSPICE\TPS61021_PSPICE_TRANS")
+  (ISPCBBASICLICENSE "false")
+  (GlobalState
+    (FileView
+      (Path "Outputs"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -8 -30 0 200 0 297"))
+      (Tab 0))))
